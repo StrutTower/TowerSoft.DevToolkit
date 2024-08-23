@@ -1,0 +1,58 @@
+﻿@page "/"
+@inject IJSRuntime JS
+
+<div class="d-flex flex-column h-100">
+    <div class="row">
+
+        <div class="col">
+            <h3>DevTools</h3>
+        </div>
+        <div class="col-auto">
+            <span class="form-control-plaintext">Themes:</span>
+        </div>
+        <div class="col-auto">
+            <div class="btn-group">
+                <button type="button" @onclick='() => SetTheme("light")' class="btn btn-outline-info btn-outline-text @(currentTheme == "light" ? "active" : "")">
+                    <span class="mdi mdi-weather-sunny"></span> Light
+                </button>
+                <button type="button" @onclick='() => SetTheme("dark")' class="btn btn-outline-info btn-outline-text @(currentTheme == "dark" ? "active" : "")">
+                    <span class="mdi mdi-weather-night"></span> Dark
+                </button>
+                <button type="button" @onclick='() => SetTheme("auto")' class="btn btn-outline-info btn-outline-text @(currentTheme == "auto" ? "active" : "")">
+                    <span class="mdi mdi-theme-light-dark"></span> Auto
+                </button>
+            </div>
+        </div>
+        <hr />
+    </div>
+    <div class="flex-grow-1">
+        <p>Select a tool from the top menu</p>
+
+    </div>
+    <div class="text-end text-faded">
+        @version
+    </div>
+</div>
+
+
+
+@code {
+
+    private string version;
+    private string currentTheme;
+
+    protected override async Task OnInitializedAsync() {
+        version = "v" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
+        if (version.StartsWith("v0.0.")) {
+            version = "alpha-" + version;
+        } else if (version.StartsWith("v0.")) {
+            version = "beta-" + version;
+        }
+        currentTheme = await JS.InvokeAsync<string>("getCurrentThemeSetting");
+    }
+
+    private async Task SetTheme(string theme) {
+        await JS.InvokeVoidAsync("updateTheme", theme);
+        currentTheme = theme;
+    }
+}

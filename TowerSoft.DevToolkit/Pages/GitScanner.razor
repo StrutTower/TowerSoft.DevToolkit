@@ -1,0 +1,65 @@
+﻿@page "/GitScanner"
+
+<h3>Git Scanner</h3>
+<p>
+    This tool scans all subdirectories in a location for any uncommitted changes, stashed changes, and if the local repository is ahead of the remote repository.
+</p>
+<hr />
+
+<div class="row mb-3">
+    <div class="col">
+        <InputText @bind-Value="folder" class="form-control" />
+    </div>
+    <div class="col-auto">
+        <button type="button" @onclick="Scan" class="btn btn-primary">Scan</button>
+    </div>
+    <div class="col-auto">
+        <div class="form-check-inline">
+            <label class="form-check-label">
+                <InputCheckbox @bind-Value="includeReposWithoutChanges" class="form-check-input"></InputCheckbox> Include Repos Without Changes
+            </label>
+        </div>
+    </div>
+</div>
+
+@if (scanning) {
+    <h4 class="text-center"><span class="mdi mdi-fw mdi-loading mdi-spin-fast"></span>Scanning for changes...</h4>
+}
+
+@if (gitRepoInfos?.Count > 0) {
+    <div>
+        @foreach (GitRepoInfo repo in gitRepoInfos) {
+            @if (repo?.Changes.Count > 0 || repo?.Stashes?.Count > 0 || repo.LocalAheadOfOrigin || includeReposWithoutChanges) {
+                <div>
+                    <span class="h5">@repo.RepoDirectory.Name</span>
+                    <span class="fake-link" @onclick="() => OpenFolder(repo.RepoDirectory.FullName)">
+                        <span class="mdi mdi-fw mdi-folder-open-outline" title="Open Folder"></span>
+                    </span>
+                </div>
+                if (repo.LocalAheadOfOrigin) {
+                    <p class="text-danger">Your local repository is ahead of the remote repository. Push your changes to the remote repository.</p>
+                }
+                @if (repo?.Changes.Count > 0) {
+                    <div class="ps-3">
+                        @foreach (string change in repo.Changes.OrderBy(x => x.Substring(3))) {
+                            <div style="white-space:pre;" class="font-monospace @GetChangeClass(change)">@ProcessChange(change)</div>
+                        }
+                    </div>
+                } else {
+                    <p class="ps-3 text-faded">No changes detected</p>
+                }
+
+                @if (repo?.Stashes?.Count > 0) {
+                    <div class="ps-2">
+                        <h6>Stashes</h6>
+                        <ul>
+                            @foreach (string stash in repo.Stashes) {
+                                <li class="font-monospace">@stash</li>
+                            }
+                        </ul>
+                    </div>
+                }
+            }
+        }
+    </div>
+}

@@ -1,0 +1,21 @@
+﻿///<reference path="_variables.scss" />
+///<reference path="../node_modules/bootstrap/scss/_variables.scss" />
+///<reference path="../node_modules/bootstrap/scss/_variables-dark.scss" />
+///<reference path="../node_modules/tower-bootstrap-theme/src/_twr-variables.scss" />
+///<reference path="../node_modules/tower-bootstrap-theme/src/_twr-variables-dark.scss" />
+
+html {
+    font-size: 14px;
+}
+
+@import "variables";
+@import "../node_modules/tower-bootstrap-theme/src/tower-bootstrap-theme.scss";
+
+
+@import "basicStyles";
+@import "blazor";
+@import "icons";
+@import "images";
+@import "tables";
+@import "menubar";
+/*@import "fixes";*/

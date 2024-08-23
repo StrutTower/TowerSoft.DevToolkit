@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<Version>0.0.1</Version>
+		<Nullable>disable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UseWPF>true</UseWPF>
+		<RootNamespace>TowerSoft.DevToolkit</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Content Remove="package-lock.json" />
+	  <Content Remove="package.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="wwwroot\themeSwitcher.js" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebView.Wpf" Version="8.0.80" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="wwwroot\fonts\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="package-lock.json">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </None>
+	  <None Include="package.json">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+</Project>

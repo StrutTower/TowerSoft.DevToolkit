@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0",
+  "name": "wpf-blazor-template",
+  "private": true,
+  "dependencies": {
+    "tower-bootstrap-theme": "5.3.6",
+    "@mdi/font": "latest"
+  },
+  "devDependencies": {
+    "gulp": "5.0.0",
+    "gulp-concat": "2.6.1",
+    "gulp-dart-sass": "1.1.0",
+    "gulp-clean-css": "4.3.0",
+    "gulp-rename": "2.0.0"
+  }
+}

@@ -1,0 +1,54 @@
+﻿///<reference path="_variables.scss" />
+///<reference path="../node_modules/bootstrap/scss/_variables.scss" />
+///<reference path="../node_modules/bootstrap/scss/_variables-dark.scss" />
+///<reference path="../node_modules/tower-bootstrap-theme/src/_twr-variables.scss" />
+///<reference path="../node_modules/tower-bootstrap-theme/src/_twr-variables-dark.scss" />
+
+@mixin pixelated {
+    -ms-interpolation-mode: nearest-neighbor; // IE 7+ (non-standard property)
+    image-rendering: -webkit-optimize-contrast; // Safari 6, UC Browser 9.9
+    image-rendering: -webkit-crisp-edges; // Safari 7+
+    image-rendering: -moz-crisp-edges; // Firefox 3.6+
+    image-rendering: -o-crisp-edges; // Opera 12
+    image-rendering: pixelated; // Chrome 41+ and Opera 26+
+}
+
+.img-pixelated {
+    @include pixelated;
+}
+
+.x32-img {
+    max-width: 32px;
+    max-height: 32px;
+}
+
+.x64-img {
+    max-height: 64px;
+    max-width: 64px;
+}
+
+.x64-img {
+    max-height: 64px;
+    max-width: 64px;
+}
+
+.x80-img {
+    max-height: 80px;
+    max-width: 80px;
+}
+
+.x128-img {
+    max-height: 128px;
+    max-width: 128px;
+}
+
+.x256-img {
+    max-height: 256px;
+    max-width: 256px;
+}
+
+.header-img {
+    width: 428px;
+    height: 200px;
+    object-fit: cover;
+}

@@ -1,0 +1,35 @@
+﻿@page "/JsonFormatter"
+
+<div class="d-flex flex-column h-100">
+    <div>
+        <h3>Json Formatter</h3>
+    </div>
+    <div class="flex-grow-1">
+        <div class="row h-100 pb-1">
+            <div class="col d-flex flex-column">
+                <label>Input</label>
+                <InputTextArea @bind-Value="inputText" class="form-control flex-grow-1 no-resize" wrap="off" />
+            </div>
+            <div class="col-auto">
+                <br />
+                <div class="mb-3">
+                    <button type="button" class="btn btn-primary w-100" @onclick="Minify">Minify</button>
+                </div>
+
+                <div class="mb-3">
+                    <button type="button" class="btn btn-primary w-100" @onclick="Beautify">Beautify</button>
+                </div>
+
+                @if (!errorOccurred && !string.IsNullOrWhiteSpace(outputText)) {
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-primary w-100" @onclick="Copy">Copy<br/>Output</button>
+                    </div>
+                }
+            </div>
+            <div class="col d-flex flex-column">
+                <label>Output</label>
+                <textarea @bind="@outputText" class="form-control flex-grow-1 no-resize json-output @(errorOccurred ? "textarea-error" : "")" wrap="off" readonly />
+            </div>
+        </div>
+    </div>
+</div>
