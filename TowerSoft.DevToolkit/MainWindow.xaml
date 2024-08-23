@@ -7,7 +7,7 @@
         xmlns:shared="clr-namespace:TowerSoft.DevToolkit.Components.Shared"
         xmlns:local="clr-namespace:TowerSoft.DevToolkit"
         mc:Ignorable="d"
-        Title="DevTools" Height="850" Width="1000">
+        Title="DevToolkit" Height="850" Width="1000">
     <Grid>
         <blazor:BlazorWebView HostPage="wwwroot\index.html" Services="{DynamicResource services}">
             <blazor:BlazorWebView.RootComponents>

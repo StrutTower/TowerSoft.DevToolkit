@@ -6,22 +6,28 @@ namespace TowerSoft.DevToolkit.Pages {
         private string outputText;
         private bool errorOccurred;
 
-        private void Minify() {
+        private async Task Minify() {
             errorOccurred = false;
             try {
-                using JsonDocument jDoc = JsonDocument.Parse(inputText);
-                outputText = JsonSerializer.Serialize(jDoc);
+                //Built-in async methods do not work string and JsonDocuments
+                await Task.Run(() => {
+                    using JsonDocument jDoc = JsonDocument.Parse(inputText);
+                    outputText = JsonSerializer.Serialize(jDoc);
+                });
             } catch (Exception ex) {
                 errorOccurred = true;
                 outputText = ex.Message;
             }
         }
 
-        private void Beautify() {
+        private async Task Beautify() {
             errorOccurred = false;
             try {
-                using JsonDocument jDoc = JsonDocument.Parse(inputText);
-                outputText = JsonSerializer.Serialize(jDoc, new JsonSerializerOptions { WriteIndented = true });
+                //Built-in async methods do not work string and JsonDocuments
+                await Task.Run(() => {
+                    using JsonDocument jDoc = JsonDocument.Parse(inputText);
+                    outputText = JsonSerializer.Serialize(jDoc, new JsonSerializerOptions { WriteIndented = true });
+                });
             } catch (Exception ex) {
                 errorOccurred = true;
                 outputText = ex.Message;

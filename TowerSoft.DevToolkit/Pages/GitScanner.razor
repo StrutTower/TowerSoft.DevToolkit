@@ -24,14 +24,14 @@
 
 @if (scanning) {
     <h4 class="text-center"><span class="mdi mdi-fw mdi-loading mdi-spin-fast"></span>Scanning for changes...</h4>
-}
-
-@if (gitRepoInfos?.Count > 0) {
+} else if (error) {
+    <div class="text-danger">@errorMessage</div>
+} else if (gitRepoInfos?.Count > 0) {
     <div>
         @foreach (GitRepoInfo repo in gitRepoInfos) {
             @if (repo?.Changes.Count > 0 || repo?.Stashes?.Count > 0 || repo.LocalAheadOfOrigin || includeReposWithoutChanges) {
                 <div>
-                    <span class="h5">@repo.RepoDirectory.Name</span>
+                    <span class="h5">@GetRelativePath(repo.RepoDirectory.FullName)</span>
                     <span class="fake-link" @onclick="() => OpenFolder(repo.RepoDirectory.FullName)">
                         <span class="mdi mdi-fw mdi-folder-open-outline" title="Open Folder"></span>
                     </span>

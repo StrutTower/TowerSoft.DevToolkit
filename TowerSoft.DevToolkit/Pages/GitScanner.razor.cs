@@ -18,14 +18,22 @@ namespace TowerSoft.DevToolkit.Pages {
 
         private async Task Scan() {
             scanning = true;
+            error = false;
+            errorMessage = null;
             gitRepoInfos.Clear();
+
             string path = Environment.ExpandEnvironmentVariables(folder);
             if (!Directory.Exists(path)) {
                 error = true;
                 errorMessage = $"Unable to find path '{path}'";
+                scanning = false;
+                return;
             }
+            string[] directories = null;
 
-            string[] directories = Directory.GetFileSystemEntries(path, ".git", SearchOption.AllDirectories);
+            await Task.Run(() => {
+                directories = Directory.GetFileSystemEntries(path, ".git", SearchOption.AllDirectories);
+            });
 
             foreach (string dir in directories) {
                 if (dir.Contains("node_modules")) continue;
@@ -114,6 +122,19 @@ namespace TowerSoft.DevToolkit.Pages {
             }
 
             return string.Empty;
+        }
+
+        private string GetRelativePath(string path) {
+            string newPath = path;
+            string scannedFolder = Environment.ExpandEnvironmentVariables(folder);
+
+            if (newPath.StartsWith(scannedFolder, StringComparison.OrdinalIgnoreCase))
+                newPath = newPath[scannedFolder.Length..];
+
+            if (newPath.StartsWith('\\'))
+                newPath = newPath[1..];
+
+            return newPath;
         }
     }
 }
