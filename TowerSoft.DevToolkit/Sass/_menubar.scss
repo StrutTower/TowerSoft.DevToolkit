@@ -5,16 +5,14 @@
 ///<reference path="../node_modules/tower-bootstrap-theme/src/_twr-variables-dark.scss" />
 
 #menubar {
-    position:fixed;
-    top:0;
-    left:0;
-    right:0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
     background: $dark;
     padding-left: 0.3em;
     padding-right: 0.3em;
     font-size: 1.1em;
-
-
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -29,6 +27,7 @@
         align-content: center;
         padding: 0.3em 0.5em;
         border-bottom: 3px solid transparent;
+        transition: border-bottom-color 0.2s ease-in-out;
 
         &.active {
             border-bottom-color: $primary;

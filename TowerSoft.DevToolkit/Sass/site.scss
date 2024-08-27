@@ -14,8 +14,10 @@ html {
 
 @import "basicStyles";
 @import "blazor";
+@import "diff";
+@import "formatter";
+@import "git";
 @import "icons";
 @import "images";
-@import "tables";
 @import "menubar";
-/*@import "fixes";*/
+@import "tables";

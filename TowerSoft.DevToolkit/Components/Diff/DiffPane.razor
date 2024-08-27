@@ -1,0 +1,24 @@
+﻿@using DiffPlex.DiffBuilder.Model;
+
+<table class="font-monospace">
+    @foreach (DiffPiece diffLine in Model.Lines) {
+        <tr>
+            <td class="diff-line-number" style="width:1%;">
+                @if (diffLine.Position.HasValue) {
+                    @diffLine.Position.ToString()
+                } else {
+                    @:&nbsp;
+                }
+            </td>
+            <td class="diff-line diff-@diffLine.Type.ToString().ToLower()-line @(WordWrap ? "" : "no-text-wrap")">
+                <DiffLine Model="diffLine" WordWrap="WordWrap" />
+            </td>
+        </tr>
+    }
+</table>
+
+@code {
+    [Parameter] public DiffPlex.DiffBuilder.Model.DiffPaneModel Model { get; set; }
+
+    [Parameter] public bool WordWrap { get; set; }
+}

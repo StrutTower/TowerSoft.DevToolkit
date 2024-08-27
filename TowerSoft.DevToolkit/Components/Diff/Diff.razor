@@ -1,0 +1,55 @@
+﻿
+<div class="d-flex flex-column h-100">
+    <div class="row">
+        <div class="col-auto">
+            <h3>Diff</h3>
+        </div>
+
+        <div class="col-auto">
+            <div class="form-check-inline pt-1">
+                <label class="form-check-label">
+                    <InputCheckbox @bind-Value="wordWrap" class="form-check-input" /> Word Wrap
+                </label>
+            </div>
+        </div>
+
+        @if (!showInputs) {
+            <div class="col-auto">
+                <button @onclick="Reset" class="btn btn-link">Reset</button>
+            </div>
+        }
+    </div>
+    @if (showInputs) {
+        <div class="flex-grow-1">
+            <div class="row g-2 h-100 pb-1">
+                <div class="col d-flex flex-column">
+                    <label>Old Text</label>
+                    <InputTextArea @bind-Value="oldText" class="form-control flex-grow-1 no-resize font-monospace" wrap="@(wordWrap ? "on": "off")" />
+                </div>
+                <div class="col-auto d-flex flex-column">
+                    <br />
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-primary w-100" @onclick="CheckDiff">Check Diff</button>
+                    </div>
+                </div>
+                <div class="col d-flex flex-column">
+                    <label>New Text</label>
+                    <InputTextArea @bind-Value="newText" class="form-control flex-grow-1 no-resize font-monospace" wrap="@(wordWrap ? "on": "off")" />
+                </div>
+            </div>
+        </div>
+    } else {
+        <div class="flex-grow-1">
+            <div class="row g-2 h-100 pb-1">
+                <div class="col diff-old-text @(wordWrap ? "" : " overflow-x-scroll")">
+                    <label>Old Text</label>
+                    <DiffPane Model="model.OldText" WordWrap="wordWrap" />
+                </div>
+                <div class="col diff-new-text @(wordWrap ? "" : " overflow-x-scroll")">
+                    <label>New Text</label>
+                    <DiffPane Model="model.NewText" WordWrap="wordWrap" />
+                </div>
+            </div>
+        </div>
+    }
+</div>

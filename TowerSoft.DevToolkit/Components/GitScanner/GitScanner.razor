@@ -1,0 +1,38 @@
+﻿<h3>Git Scanner</h3>
+<p>
+    This tool scans all subdirectories in a location for any uncommitted changes, stashed changes, and if the local repository is ahead of the remote repository.
+</p>
+<hr />
+
+<div class="row mb-3">
+    <div class="col">
+        <InputText @bind-Value="folder" class="form-control" />
+    </div>
+    <div class="col-auto">
+        <button type="button" @onclick="StartScan" class="btn btn-primary" disabled="@scanning">Scan</button>
+    </div>
+    <div class="col-auto">
+        <div class="form-check-inline">
+            <label class="form-check-label">
+                <InputCheckbox @bind-Value="includeReposWithoutChanges" class="form-check-input"></InputCheckbox> Include Repos Without Changes
+            </label>
+        </div>
+    </div>
+</div>
+
+@if (scanning) {
+    <h4 class="text-center">
+        <span class="mdi mdi-fw mdi-loading mdi-spin-fast"></span> Scanning for changes...
+    </h4>
+        @if (!string.IsNullOrWhiteSpace(scanningProgress)) {
+            <h4 class="text-center">@scanningProgress</h4>
+        }
+} else if (error) {
+    <div class="text-danger">@errorMessage</div>
+} else if (gitRepoInfos?.Count > 0) {
+    <div>
+        @foreach (GitRepoInfo repo in gitRepoInfos) {
+            <GitRepoDisplay Model="repo" IncludeReposWithoutChanges="includeReposWithoutChanges" />
+        }
+    </div>
+}

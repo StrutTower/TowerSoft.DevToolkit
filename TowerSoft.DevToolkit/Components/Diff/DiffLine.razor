@@ -1,0 +1,19 @@
+﻿@using DiffPlex.DiffBuilder.Model;
+
+@if (!string.IsNullOrEmpty(Model.Text)) {
+    if (Model.Type == ChangeType.Deleted || Model.Type == ChangeType.Inserted || Model.Type == ChangeType.Unchanged) {
+        <div class="mb-0 @(WordWrap ? "pre-wrap" : "pre")">@Model.Text</div>
+    } else if (Model.Type == ChangeType.Modified) {
+        foreach (var character in Model.SubPieces) {
+            if (character.Type == ChangeType.Imaginary) { continue; }
+
+            <span class="diff-@character.Type.ToString().ToLower()-piece @(WordWrap ? "pre-wrap" : "pre")">@((MarkupString)character.Text)</span>
+        }
+    }
+}
+
+@code {
+    [Parameter] public DiffPiece Model { get; set; }
+
+    [Parameter] public bool WordWrap { get; set; }
+}

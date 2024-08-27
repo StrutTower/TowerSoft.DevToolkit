@@ -1,26 +1,19 @@
-﻿@page "/"
-@inject IJSRuntime JS
+﻿@inject IJSRuntime JS
 
 <div class="d-flex flex-column h-100">
     <div class="row">
 
         <div class="col">
-            <h3>DevTools</h3>
+            <h3>DevToolkit</h3>
         </div>
         <div class="col-auto">
             <span class="form-control-plaintext">Themes:</span>
         </div>
         <div class="col-auto">
             <div class="btn-group">
-                <button type="button" @onclick='() => SetTheme("light")' class="btn btn-outline-info btn-outline-text @(currentTheme == "light" ? "active" : "")">
-                    <span class="mdi mdi-weather-sunny"></span> Light
-                </button>
-                <button type="button" @onclick='() => SetTheme("dark")' class="btn btn-outline-info btn-outline-text @(currentTheme == "dark" ? "active" : "")">
-                    <span class="mdi mdi-weather-night"></span> Dark
-                </button>
-                <button type="button" @onclick='() => SetTheme("auto")' class="btn btn-outline-info btn-outline-text @(currentTheme == "auto" ? "active" : "")">
-                    <span class="mdi mdi-theme-light-dark"></span> Auto
-                </button>
+                <ThemeButton Theme="Light" CurrentTheme="@currentTheme" OnSetTheme="SetTheme"/>
+                <ThemeButton Theme="Dark" CurrentTheme="@currentTheme" OnSetTheme="SetTheme"/>
+                <ThemeButton Theme="Auto" CurrentTheme="@currentTheme" OnSetTheme="SetTheme"/>
             </div>
         </div>
         <hr />

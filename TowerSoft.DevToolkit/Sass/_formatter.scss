@@ -1,0 +1,27 @@
+///<reference path="_variables.scss" />
+///<reference path="../node_modules/bootstrap/scss/_variables.scss" />
+///<reference path="../node_modules/bootstrap/scss/_variables-dark.scss" />
+///<reference path="../node_modules/tower-bootstrap-theme/src/_twr-variables.scss" />
+///<reference path="../node_modules/tower-bootstrap-theme/src/_twr-variables-dark.scss" />
+
+.formatter-output {
+    color: $body-color !important;
+    background: $input-bg !important;
+    border-bottom: $input-border-width solid $input-border-color !important;
+
+    &:focus {
+        border-bottom-color: $input-focus-border-color !important;
+    }
+}
+
+[data-bs-theme="dark"] {
+    .formatter-output {
+        color: $body-color-dark !important;
+        background: $input-bg-dark !important;
+        border-bottom-color: $input-border-color-dark !important;
+
+        &.textarea-error {
+            color: $danger !important;
+        }
+    }
+}

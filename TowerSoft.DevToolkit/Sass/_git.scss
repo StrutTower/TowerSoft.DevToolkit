@@ -1,0 +1,32 @@
+///<reference path="_variables.scss" />
+///<reference path="../node_modules/bootstrap/scss/_variables.scss" />
+///<reference path="../node_modules/bootstrap/scss/_variables-dark.scss" />
+///<reference path="../node_modules/tower-bootstrap-theme/src/_twr-variables.scss" />
+///<reference path="../node_modules/tower-bootstrap-theme/src/_twr-variables-dark.scss" />
+
+.git-added {
+    color: green;
+}
+
+.git-modified {
+    color: #939300;
+}
+
+.git-removed {
+    color: #d10000;
+}
+
+
+[data-bs-theme="dark"] {
+    .git-added {
+        color: #00d500;
+    }
+
+    .git-modified {
+        color: yellow;
+    }
+
+    .git-removed {
+        color: red;
+    }
+}

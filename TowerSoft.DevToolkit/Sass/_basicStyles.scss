@@ -13,15 +13,6 @@ html, body, #app {
     cursor: pointer;
 }
 
-.json-output {
-    color: $body-color !important;
-    background: $input-bg !important;
-    border-bottom: $input-border-width solid $input-border-color !important;
-
-    &:focus {
-        border-bottom-color: $input-focus-border-color !important;
-    }
-}
 
 textarea.textarea-error {
     color: $danger !important;
@@ -39,47 +30,29 @@ textarea.textarea-error {
     }
 }
 
-.git-added {
-    color: green;
+.hidden {
+    display:none !important;
 }
 
-.git-modified {
-    color: #939300;
+.pre {
+    white-space:pre;
 }
 
-.git-removed {
-    color: #d10000;
+.pre-wrap {
+    white-space: pre-wrap;
 }
+
+.no-text-wrap {
+    text-wrap: nowrap;
+}
+
 
 [data-bs-theme="dark"] {
     .fake-link {
         color: $link-color-dark;
     }
 
-    .json-output {
-        color: $body-color-dark !important;
-        background: $input-bg-dark !important;
-        border-bottom-color: $input-border-color-dark !important;
-
-        &.textarea-error {
-            color: $danger !important;
-        }
-    }
-
     .btn-outline-text {
         color: $light;
-    }
-
-
-    .git-added {
-        color: #00d500;
-    }
-
-    .git-modified {
-        color: yellow;
-    }
-
-    .git-removed {
-        color: red;
     }
 }

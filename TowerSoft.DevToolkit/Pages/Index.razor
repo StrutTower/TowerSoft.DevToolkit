@@ -1,0 +1,21 @@
+﻿@page "/"
+
+<div id="menubar">
+    <MenuTab TabID="" CurrentTabID="@currentTab" OnSetTab="SetTab"><span class="mdi mdi-fw mdi-home"></span></MenuTab>
+    <MenuTab TabID="gitScanner" CurrentTabID="@currentTab" OnSetTab="SetTab">Git Scanner</MenuTab>
+    <MenuTab TabID="formatter" CurrentTabID="@currentTab" OnSetTab="SetTab">Formatter</MenuTab>
+    <MenuTab TabID="diff" CurrentTabID="@currentTab" OnSetTab="SetTab">Diff</MenuTab>
+</div>
+
+<TabDisplay TabID="" CurrentTabID="@currentTab"><Home /></TabDisplay>
+<TabDisplay TabID="gitScanner" CurrentTabID="@currentTab"><GitScanner /></TabDisplay>
+<TabDisplay TabID="formatter" CurrentTabID="@currentTab"><Formatter /></TabDisplay>
+<TabDisplay TabID="diff" CurrentTabID="@currentTab"><Diff /></TabDisplay>
+
+@code {
+    private string currentTab = string.Empty;
+
+    private void SetTab(string tab) {
+        currentTab = tab;
+    }
+}

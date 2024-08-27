@@ -1,12 +1,12 @@
-﻿using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using TowerSoft.DevToolkit.Models;
 using TowerSoft.DevToolkit.Utilities;
 
-namespace TowerSoft.DevToolkit.Pages {
+namespace TowerSoft.DevToolkit.Components.GitScanner {
     public partial class GitScanner {
         private string folder;
         private bool scanning = false;
+        private string scanningProgress;
         private bool error;
         private string errorMessage;
         private bool includeReposWithoutChanges = false;
@@ -16,7 +16,16 @@ namespace TowerSoft.DevToolkit.Pages {
             folder = @"%USERPROFILE%\source\repos";
         }
 
-        private async Task Scan() {
+        private async Task StartScan() {
+            Progress<string> progressReporter = new Progress<string>();
+            progressReporter.ProgressChanged += (prop, data) => {
+                scanningProgress = data;
+                StateHasChanged();
+            };
+            await Scan(progressReporter);
+        }
+
+        private async Task Scan(IProgress<string> progress) {
             scanning = true;
             error = false;
             errorMessage = null;
@@ -35,7 +44,11 @@ namespace TowerSoft.DevToolkit.Pages {
                 directories = Directory.GetFileSystemEntries(path, ".git", SearchOption.AllDirectories);
             });
 
+            int currentRepoCount = 1;
+
             foreach (string dir in directories) {
+                progress.Report($"{currentRepoCount} / {directories.Length}");
+
                 if (dir.Contains("node_modules")) continue;
                 DirectoryInfo di = new(dir);
 
@@ -44,6 +57,7 @@ namespace TowerSoft.DevToolkit.Pages {
                 if (!string.IsNullOrWhiteSpace(changesResult.Error)) {
                     gitRepoInfos.Add(new() {
                         RepoDirectory = di.Parent,
+                        ScannedFolder = Environment.ExpandEnvironmentVariables(folder),
                         ErrorOccurred = true,
                         ErrorMessage = changesResult.Error
                     });
@@ -52,6 +66,7 @@ namespace TowerSoft.DevToolkit.Pages {
 
                 GitRepoInfo info = new() {
                     RepoDirectory = di.Parent,
+                    ScannedFolder = Environment.ExpandEnvironmentVariables(folder),
                     ErrorOccurred = false,
                     Changes = [.. changesResult.Output.Split('\n', StringSplitOptions.RemoveEmptyEntries)]
                 };
@@ -72,69 +87,15 @@ namespace TowerSoft.DevToolkit.Pages {
                     info.ErrorMessage = statusResult.Error;
                 } else {
                     if (statusResult.Output.Contains("ahead", StringComparison.OrdinalIgnoreCase)) {
-                        info.LocalAheadOfOrigin = true;
+                        info.LocalAheadOfRemote = true;
                     }
                 }
 
                 gitRepoInfos.Add(info);
+                currentRepoCount++;
             }
             scanning = false;
-        }
-
-        private static void OpenFolder(string folderPath) {
-            using Process process = new() {
-                StartInfo = new ProcessStartInfo {
-                    FileName = folderPath,
-                    UseShellExecute = true,
-                    Verb = "open"
-                }
-            };
-            process.Start();
-        }
-
-        private static string ProcessChange(string change) {
-            string prefix = change[..2];
-            string file = change[3..];
-
-            if (prefix == "??" || prefix.Contains('A')) {
-                return " + " + file;
-            }
-            if (prefix.Contains('M')) {
-                return " * " + file;
-            }
-            if (prefix.Contains('D')) {
-                return " - " + file;
-            }
-            return prefix + " " + file;
-        }
-
-        private static string GetChangeClass(string change) {
-            string prefix = change[..2];
-
-            if (prefix == "??" || prefix.Contains('A')) {
-                return "git-added";
-            }
-            if (prefix.Contains('M')) {
-                return "git-modified";
-            }
-            if (prefix.Contains('D')) {
-                return "git-removed";
-            }
-
-            return string.Empty;
-        }
-
-        private string GetRelativePath(string path) {
-            string newPath = path;
-            string scannedFolder = Environment.ExpandEnvironmentVariables(folder);
-
-            if (newPath.StartsWith(scannedFolder, StringComparison.OrdinalIgnoreCase))
-                newPath = newPath[scannedFolder.Length..];
-
-            if (newPath.StartsWith('\\'))
-                newPath = newPath[1..];
-
-            return newPath;
+            scanningProgress = null;
         }
     }
 }
