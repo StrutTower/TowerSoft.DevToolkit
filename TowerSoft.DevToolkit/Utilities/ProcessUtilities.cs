@@ -3,7 +3,7 @@ using TowerSoft.DevToolkit.Models;
 
 namespace TowerSoft.DevToolkit.Utilities {
     public static class ProcessUtilities {
-        public static async Task<ProcessResult> GetOutput(string filename, string arguements, string workingDirectory) {
+        public static async Task<ProcessResult> GetOutput(string filename, string arguements, string workingDirectory = null) {
             using Process process = new() {
                 StartInfo = new() {
                     FileName = filename,

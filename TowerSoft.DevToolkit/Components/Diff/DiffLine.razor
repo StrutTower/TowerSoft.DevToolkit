@@ -1,14 +1,17 @@
 ﻿@using DiffPlex.DiffBuilder.Model;
 
 @if (!string.IsNullOrEmpty(Model.Text)) {
-    if (Model.Type == ChangeType.Deleted || Model.Type == ChangeType.Inserted || Model.Type == ChangeType.Unchanged) {
-        <div class="mb-0 @(WordWrap ? "pre-wrap" : "pre")">@Model.Text</div>
-    } else if (Model.Type == ChangeType.Modified) {
-        foreach (var character in Model.SubPieces) {
+
+    if (Model.Type == ChangeType.Modified) {
+        foreach (DiffPiece character in Model.SubPieces) {
             if (character.Type == ChangeType.Imaginary) { continue; }
 
-            <span class="diff-@character.Type.ToString().ToLower()-piece @(WordWrap ? "pre-wrap" : "pre")">@((MarkupString)character.Text)</span>
+            <span class="@GetDiffPieceClass(character) @GetWrapClass()">@((MarkupString)character.Text)</span>
         }
+
+    } else {
+        <div class="mb-0 @GetWrapClass()">@Model.Text</div>
+
     }
 }
 
@@ -16,4 +19,15 @@
     [Parameter] public DiffPiece Model { get; set; }
 
     [Parameter] public bool WordWrap { get; set; }
+
+
+    private string GetWrapClass() {
+        if (WordWrap)
+            return "pre-wrap";
+        return "pre";
+    }
+
+    private string GetDiffPieceClass(DiffPiece character) {
+        return $"diff-{character.Type.ToString().ToLower()}-piece";
+    }
 }
