@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
 		<TargetFramework>net8.0-windows</TargetFramework>
-		<Version>0.0.3</Version>
+		<Version>0.0.4</Version>
 		<Nullable>disable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UseWPF>true</UseWPF>
@@ -20,14 +20,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DiffPlex" Version="1.7.2" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebView.Wpf" Version="8.0.80" />
-		<PackageReference Include="NUglify" Version="1.21.9" />
-		<PackageReference Include="System.Text.Json" Version="8.0.4" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="wwwroot\fonts\" />
+		<PackageReference Include="DiffPlex" Version="1.9.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebView.Wpf" Version="8.0.100" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.3" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+		<PackageReference Include="NUglify" Version="1.21.17" />
 	</ItemGroup>
 
 	<ItemGroup>

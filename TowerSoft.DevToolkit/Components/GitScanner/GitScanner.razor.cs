@@ -7,6 +7,7 @@ namespace TowerSoft.DevToolkit.Components.GitScanner {
         private string folder;
         private bool scanning = false;
         private string scanningProgress;
+        private string scanningFolder;
         private bool error;
         private string errorMessage;
         private bool includeReposWithoutChanges = false;
@@ -19,7 +20,9 @@ namespace TowerSoft.DevToolkit.Components.GitScanner {
         private async Task StartScan() {
             Progress<string> progressReporter = new Progress<string>();
             progressReporter.ProgressChanged += (prop, data) => {
-                scanningProgress = data;
+                var parts = data.Split(["||"], StringSplitOptions.RemoveEmptyEntries);
+                scanningProgress = parts[0];
+                scanningFolder = parts[1];
                 StateHasChanged();
             };
             await Scan(progressReporter);
@@ -47,7 +50,7 @@ namespace TowerSoft.DevToolkit.Components.GitScanner {
             int currentRepoCount = 1;
 
             foreach (string dir in directories) {
-                progress.Report($"{currentRepoCount} / {directories.Length}");
+                progress.Report($"{currentRepoCount} / {directories.Length}||{dir}");
 
                 if (dir.Contains("node_modules")) continue;
                 DirectoryInfo di = new(dir);
@@ -81,15 +84,15 @@ namespace TowerSoft.DevToolkit.Components.GitScanner {
                 }
 
                 // Check if repo is ahead of remote
-                ProcessResult statusResult = await ProcessUtilities.GetOutput("git.exe", "status -sb", di.Parent.FullName);
-                if (!string.IsNullOrWhiteSpace(statusResult.Error)) {
-                    info.ErrorOccurred = true;
-                    info.ErrorMessage = statusResult.Error;
-                } else {
-                    if (statusResult.Output.Contains("ahead", StringComparison.OrdinalIgnoreCase)) {
-                        info.LocalAheadOfRemote = true;
-                    }
+                string output = await ProcessUtilities.GetStandardOutputTest("git.exe", "status -sb", di.Parent.FullName);
+                //if (!string.IsNullOrWhiteSpace(statusResult.Error)) {
+                //    info.ErrorOccurred = true;
+                //    info.ErrorMessage = statusResult.Error;
+                //} else {
+                if (output.Contains("ahead", StringComparison.OrdinalIgnoreCase)) {
+                    info.LocalAheadOfRemote = true;
                 }
+                //}
 
                 gitRepoInfos.Add(info);
                 currentRepoCount++;

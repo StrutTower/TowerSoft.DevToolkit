@@ -2,7 +2,9 @@
 <p>
     This tool scans all subdirectories in a location for any uncommitted changes, stashed changes, and if the local repository is ahead of the remote repository.
 </p>
-<hr />
+<div class="row">
+    <hr />
+</div>
 
 <div class="row mb-3">
     <div class="col">
@@ -22,10 +24,11 @@
 
 @if (scanning) {
     <h4 class="text-center">
-        <span class="mdi mdi-fw mdi-loading mdi-spin-fast"></span> Scanning for changes...
+        <IconLoader /> Scanning for changes...
     </h4>
         @if (!string.IsNullOrWhiteSpace(scanningProgress)) {
             <h4 class="text-center">@scanningProgress</h4>
+            <h5>@scanningFolder</h5>
         }
 } else if (error) {
     <div class="text-danger">@errorMessage</div>

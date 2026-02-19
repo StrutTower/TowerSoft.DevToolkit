@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.IO;
 using TowerSoft.DevToolkit.Models;
 
 namespace TowerSoft.DevToolkit.Utilities {
@@ -16,6 +17,7 @@ namespace TowerSoft.DevToolkit.Utilities {
                 }
             };
             process.Start();
+
             await process.WaitForExitAsync();
 
             ProcessResult result = new() {
@@ -24,6 +26,32 @@ namespace TowerSoft.DevToolkit.Utilities {
             };
 
             return result;
+        }
+
+        public static async Task<string> GetStandardOutputTest(string filename, string arguements, string workingDirectory = null) {
+            using Process process = new() {
+                StartInfo = new() {
+                    FileName = filename,
+                    Arguments = arguements,
+                    WorkingDirectory = workingDirectory,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                }
+            };
+            process.Start();
+
+            StreamReader reader = process.StandardOutput;
+
+            List<string> lines = [];
+            while (reader.Peek() >= 0) {
+                lines.Add(await reader.ReadLineAsync());
+            }
+            await process.WaitForExitAsync();
+            process.Close();
+
+            return string.Join(Environment.NewLine, lines);
         }
     }
 }

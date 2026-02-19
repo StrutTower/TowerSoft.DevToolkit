@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System.Net.Http;
 using System.Windows;
 using TowerSoft.DevToolkit.Utilities;
 
@@ -10,7 +9,7 @@ namespace TowerSoft.DevToolkit {
     public partial class MainWindow : Window {
         public MainWindow() {
             InitializeComponent();
-            ServiceCollection serviceCollection = new ServiceCollection();
+            ServiceCollection serviceCollection = new();
             serviceCollection.AddWpfBlazorWebView();
             serviceCollection.AddBlazorWebViewDeveloperTools();
 

@@ -1,36 +1,33 @@
 ﻿
 <div class="d-flex flex-column h-100">
     <div class="row">
-        <div class="col-auto">
-            <h3>Diff</h3>
-        </div>
+        <div class="col">
+            <h3 class="d-inline-block pe-4">Diff</h3>
 
-        <div class="col-auto">
-            <div class="form-check-inline pt-1">
+            <div class="form-check-inline">
                 <label class="form-check-label">
                     <InputCheckbox @bind-Value="wordWrap" class="form-check-input" /> Word Wrap
                 </label>
             </div>
         </div>
+        <div class="col-auto">
+            @if (showInputs) {
+                <button type="button" class="btn btn-primary w-100" @onclick="CheckDiff">Check Diff</button>
+            } else {
+                <button @onclick="Reset" class="btn btn-info">Reset</button>
+            }
+        </div>
+        <div class="col">
 
-        @if (!showInputs) {
-            <div class="col-auto">
-                <button @onclick="Reset" class="btn btn-link">Reset</button>
-            </div>
-        }
+        </div>
     </div>
+
     @if (showInputs) {
         <div class="flex-grow-1">
             <div class="row g-2 h-100 pb-1">
                 <div class="col d-flex flex-column">
                     <label>Old Text</label>
                     <InputTextArea @bind-Value="oldText" class="form-control flex-grow-1 no-resize font-monospace" wrap="@(wordWrap ? "on": "off")" />
-                </div>
-                <div class="col-auto d-flex flex-column">
-                    <br />
-                    <div class="mb-3">
-                        <button type="button" class="btn btn-primary w-100" @onclick="CheckDiff">Check Diff</button>
-                    </div>
                 </div>
                 <div class="col d-flex flex-column">
                     <label>New Text</label>

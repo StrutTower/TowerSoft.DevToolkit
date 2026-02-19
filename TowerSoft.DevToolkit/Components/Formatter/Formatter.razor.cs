@@ -1,8 +1,9 @@
-﻿using NUglify;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using NUglify;
 using NUglify.Css;
 using NUglify.Html;
 using NUglify.JavaScript;
-using System.Text.Json;
 using TowerSoft.DevToolkit.Models;
 
 namespace TowerSoft.DevToolkit.Components.Formatter {
@@ -138,16 +139,13 @@ namespace TowerSoft.DevToolkit.Components.Formatter {
         }
 
         private async Task<FormatterResult> FormatJson(bool minify) {
-            JsonSerializerOptions options = new();
-            if (!minify)
-                options.WriteIndented = true;
+            Formatting formatting = minify ? Formatting.None : Formatting.Indented;
 
             FormatterResult result = new();
             try {
-                //Built-in async methods do not work strings and JsonDocuments
                 await Task.Run(() => {
-                    using JsonDocument jDoc = JsonDocument.Parse(inputText);
-                    result.Output = JsonSerializer.Serialize(jDoc, options);
+                   var obj = JsonConvert.DeserializeObject<JObject>(inputText);
+                    result.Output = JsonConvert.SerializeObject(obj, formatting);
                 });
             } catch (Exception ex) {
                 result.ErrorOccurred = true;

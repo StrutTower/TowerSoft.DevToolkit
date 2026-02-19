@@ -1,4 +1,11 @@
 ﻿
 <button type="button" @onclick="SetTheme" class="btn btn-outline-info btn-outline-text @(CurrentTheme == Theme.ToLower() ? "active" : "")">
-    <span class="@iconClass"></span>@Theme
+    @if (Theme == "Light") {
+        <IconSun />
+    } else if (Theme == "Dark") {
+        <IconMoon />
+    } else {
+        <IconSunMoon />
+    }
+    @Theme
 </button>

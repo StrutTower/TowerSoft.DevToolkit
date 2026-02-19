@@ -3,8 +3,8 @@
     <div class="mb-3">
         <div>
             <span class="h5">@GetRelativePath(Model.RepoDirectory.FullName)</span>
-            <a href="#" @onclick="() => OpenFolder(Model.RepoDirectory.FullName)" class="ps-1">
-                <span class="mdi mdi-fw mdi-folder-open-outline" title="Open Folder"></span>
+            <a href="#" @onclick="() => OpenFolder(Model.RepoDirectory.FullName)" class="ps-1" title="Open Folder">
+                <IconFolderOpen />
             </a>
         </div>
 

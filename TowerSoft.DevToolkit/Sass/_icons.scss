@@ -4,64 +4,42 @@
 ///<reference path="../node_modules/tower-bootstrap-theme/src/_twr-variables.scss" />
 ///<reference path="../node_modules/tower-bootstrap-theme/src/_twr-variables-dark.scss" />
 
-.mdi:before {
+.tabler-icon {
     text-decoration: none;
-    //Set the font size to be larger. Default size seems too small
-    font-size: 1.2em;
-    line-height: 0.75em;
-    vertical-align: -15%;
-}
-
-.mdi-fw:before {
+    height: 1.2em;
     width: 1.2em;
-    text-align: center;
+    line-height: 0.75em;
+    margin: -0.1em 0.1em 0 0.1em;
+    fill: none;
+    /*stroke: hsl(from currentColor h s l / 100%);*/
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
-.mdi-lg {
+.icon-lg {
     font-size: 1.33333333em;
     line-height: 0.75em;
     vertical-align: -15%;
 }
 
-.mdi-2x {
-    font-size: 2em;
+.tabler-loader-3 path {
+    animation: spin 1s linear;
+    animation-iteration-count: infinite;
+    transform-origin: center;
+
+    &:last-child {
+        animation-direction: reverse;
+    }
 }
 
-.mdi-3x {
-    font-size: 3em;
-}
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
 
-.mdi-4x {
-    font-size: 4em;
-}
-
-.mdi-spin-fast:before {
-    animation: mdi-spin 1s linear infinite;
-}
-
-.mdi-ul {
-    padding-left: 0;
-    margin-left: 2.14285714em;
-    list-style-type: none;
-
-    .mdi-li {
-        width: 0;
-        position: relative;
-
-        &:before {
-            position: absolute;
-            left: -19px;
-            top: 5px;
-            width: 0;
-        }
-
-        &.ul-bullet-style {
-            font-size: 0.3em;
-
-            &:before {
-                left: -14px;
-                top: -1px;
-            }
-        }
+    to {
+        transform: rotate(360deg);
     }
 }

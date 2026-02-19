@@ -5,10 +5,9 @@
 ///<reference path="../node_modules/tower-bootstrap-theme/src/_twr-variables-dark.scss" />
 
 #menubar {
-    position: fixed;
+    /*position: sticky;
     top: 0;
-    left: 0;
-    right: 0;
+    z-index: 999;*/
     background: $dark;
     padding-left: 0.3em;
     padding-right: 0.3em;

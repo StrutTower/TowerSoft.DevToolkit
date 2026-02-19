@@ -13,8 +13,10 @@
         MinHeight="400"
         MinWidth="400"
         Background="#2A2A2E">
-    <Grid>
-        <blazor:BlazorWebView HostPage="wwwroot\index.html" Services="{DynamicResource services}">
+    <Grid ScrollViewer.CanContentScroll="False">
+        <blazor:BlazorWebView HostPage="wwwroot\index.html" 
+                              
+                              Services="{DynamicResource services}">
             <blazor:BlazorWebView.RootComponents>
                 <blazor:RootComponent Selector="#app" ComponentType="{x:Type shared:RouteHandler}" />
             </blazor:BlazorWebView.RootComponents>

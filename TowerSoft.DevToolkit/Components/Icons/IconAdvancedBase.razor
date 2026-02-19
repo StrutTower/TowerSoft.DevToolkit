@@ -1,0 +1,8 @@
+﻿
+<svg @attributes="@Attributes"
+     viewBox="0 0 24 24">
+
+    @foreach (ISvgSubElement part in Parts) {
+        @part.ToHtml()
+    }
+</svg>
