@@ -1,4 +1,5 @@
 ﻿@page "/"
+@inject IJSRuntime JS
 
 <div class="d-flex flex-column h-100">
     <div id="menubar" class="position-sticky">
@@ -6,16 +7,15 @@
         <MenuTab TabID="gitScanner" CurrentTabID="@currentTab" OnSetTab="SetTab">Git Scanner</MenuTab>
         <MenuTab TabID="formatter" CurrentTabID="@currentTab" OnSetTab="SetTab">Formatter</MenuTab>
         <MenuTab TabID="diff" CurrentTabID="@currentTab" OnSetTab="SetTab">Diff</MenuTab>
-        @*<MenuTab TabID="api" CurrentTabID="@currentTab" OnSetTab="SetTab">API Tester</MenuTab>*@
+        <MenuTab TabID="logs" CurrentTabID="@currentTab" OnSetTab="SetTab">Logs</MenuTab>
     </div>
 
     <div class="container-fluid my-2 flex-grow-1">
-        @* *@
         <TabDisplay TabID="" CurrentTabID="@currentTab"><Home /></TabDisplay>
         <TabDisplay TabID="gitScanner" CurrentTabID="@currentTab"><GitScanner /></TabDisplay>
         <TabDisplay TabID="formatter" CurrentTabID="@currentTab"><Formatter /></TabDisplay>
         <TabDisplay TabID="diff" CurrentTabID="@currentTab"><Diff /></TabDisplay>
-        @*<TabDisplay TabID="api" CurrentTabID="@currentTab"><ApiTester /></TabDisplay>*@
+        <TabDisplay TabID="logs" CurrentTabID="@currentTab"><Logs /></TabDisplay>
     </div>
 </div>
 
@@ -24,5 +24,12 @@
 
     private void SetTab(string tab) {
         currentTab = tab;
+    }
+
+    protected override async Task OnInitializedAsync() {
+        string hashValue = await JS.InvokeAsync<string>("eval", "window.location.hash");
+        if (!string.IsNullOrWhiteSpace(hashValue) && hashValue != "#") {
+            currentTab = hashValue.Substring(1);
+        }
     }
 }

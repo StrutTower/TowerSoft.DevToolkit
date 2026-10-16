@@ -1,0 +1,119 @@
+﻿@page "/LogSettings"
+@inject IJSRuntime JS
+@inject NavigationManager navManager
+@inject AppSettingsService AppSettingsServices
+
+<div class="container-fluid pt-2 mb-2 border-bottom">
+    <div class="row g-1">
+        <div class="col col-md-6 text-md-center order-md-1 mb-2">
+            <h3 class="mb-0">Log Settings</h3>
+        </div>
+        <div class="col-auto col-md-3 order-md-0 mb-2">
+            <button @onclick="BackClicked" class="btn btn-link"><IconArrowLeft />Back</button>
+        </div>
+        <div class="col-auto col-md-3 order-md-3 mb-2 text-end">
+            <button @onclick="AddApp" class="btn btn-link">
+                <IconAdd />Add Application
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    @if (appSettings.LogApplications != null) {
+        @foreach (LogApplication app in appSettings.LogApplications.OrderBy(x => x.Name)) {
+            <div class="card">
+                <div class="bg-dark px-3 py-2 border-bottom">
+                    <span class="h5 my-0">@app.Name</span>
+
+                    <button @onclick="() => EditApp(app)" class="btn btn-link btn-line-height-fix">
+                        <IconEdit />Edit
+                    </button>
+
+                    <button @onclick="() => AddLog(app)" class="btn btn-link btn-line-height-fix">
+                        <IconAdd />Add Log
+                    </button>
+                </div>
+                <div class="card-body">
+                    @if (app.Logs != null && app.Logs.Any())
+                        @foreach (LogInstance log in app.Logs) {
+                            <div class="mb-3">
+                                <div>
+                                    @log.Name
+                                    <a @onclick="() => EditLog(log)" class="btn btn-link btn-line-height-fix">
+                                        <IconEdit />
+                                    </a>
+                                </div>
+                                <em>@System.IO.Path.Combine(log.LogFolder, log.LogFilenamePattern)</em>
+                                &nbsp;&nbsp;
+                                <small class="text-muted">
+                                    @EnumUtilities.GetEnumDisplayName(log.RollingType)
+                                </small>
+                            </div>
+                        } else {
+                            <p>No logs added yet</p>
+                        }
+                </div>
+            </div>
+        }
+    }
+</div>
+
+<dialog id="EditAppModal" @ref="editAppModal">
+    <h4 class="text-center">@(editApp ? "Edit" : "New") Application</h4>
+
+    @if (modalApp != null) {
+        <EditForm Model="modalApp" OnValidSubmit="AppValidSubmit">
+            <DataAnnotationsValidator />
+
+            <div class="mb-3">
+                <label>Name</label>
+                <InputText @bind-Value="modalApp.Name" class="form-control" required />
+            </div>
+
+            <div class="text-end">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="button" @onclick="CloseAppModal" class="btn btn-secondary">Cancel</button>
+            </div>
+        </EditForm>
+    }
+</dialog>
+
+<dialog id="EditLogModal" @ref="editLogModal">
+    <h4 class="text-center">@(editApp ? "Edit" : "New") Log</h4>
+
+    @if (modalLogInstance != null) {
+        <EditForm Model="modalLogInstance" OnValidSubmit="LogValidSubmit">
+            <DataAnnotationsValidator />
+
+            <div class="mb-3">
+                <label>Name</label>
+                <InputText @bind-Value="modalLogInstance.Name" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+                <label>Log Folder</label>
+                <InputText @bind-Value="modalLogInstance.LogFolder" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+                <label>Log Filename Pattern</label>
+                <InputText @bind-Value="modalLogInstance.LogFilenamePattern" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+                <label>Log Rolling Type</label>
+                <InputSelect @bind-Value="modalLogInstance.RollingType" class="form-control" required>
+                    @foreach(Enum enumValue in Enum.GetValues(typeof(RollingType))) {
+                        <option value="@enumValue">@EnumUtilities.GetEnumDisplayName(enumValue)</option>
+                    }
+                </InputSelect>
+            </div>
+
+            <div class="text-end">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="button" @onclick="CloseLogModal" class="btn btn-secondary">Cancel</button>
+            </div>
+        </EditForm>
+    }
+</dialog>

@@ -1,5 +1,8 @@
-﻿using System.IO;
+﻿using LibGit2Sharp;
+using Microsoft.AspNetCore.Components;
+using System.IO;
 using TowerSoft.DevToolkit.Models;
+using TowerSoft.DevToolkit.Services;
 using TowerSoft.DevToolkit.Utilities;
 
 namespace TowerSoft.DevToolkit.Components.GitScanner {
@@ -13,19 +16,28 @@ namespace TowerSoft.DevToolkit.Components.GitScanner {
         private bool includeReposWithoutChanges = false;
         private List<GitRepoInfo> gitRepoInfos = [];
 
+        [Inject]
+        public AppSettingsService AppSettingsService { get; set; }
+
         protected override void OnInitialized() {
-            folder = @"%USERPROFILE%\source\repos";
+            //folder = @"%USERPROFILE%\source\repos";
+            folder = AppSettingsService.AppSettings.GitScannerDefaultPath;
         }
 
         private async Task StartScan() {
             Progress<string> progressReporter = new Progress<string>();
             progressReporter.ProgressChanged += (prop, data) => {
-                var parts = data.Split(["||"], StringSplitOptions.RemoveEmptyEntries);
+                string[] parts = data.Split(["||"], StringSplitOptions.RemoveEmptyEntries);
                 scanningProgress = parts[0];
                 scanningFolder = parts[1];
                 StateHasChanged();
             };
-            await Scan(progressReporter);
+            //await Scan(progressReporter);
+
+
+            await ScanNew(progressReporter);
+
+            //ScanNew();
         }
 
         private async Task Scan(IProgress<string> progress) {
@@ -93,6 +105,92 @@ namespace TowerSoft.DevToolkit.Components.GitScanner {
                     info.LocalAheadOfRemote = true;
                 }
                 //}
+
+                gitRepoInfos.Add(info);
+                currentRepoCount++;
+            }
+            scanning = false;
+            scanningProgress = null;
+        }
+
+        private async Task ScanNew(IProgress<string> progress) {
+            scanning = true;
+            error = false;
+            errorMessage = null;
+            gitRepoInfos.Clear();
+
+            string path = Environment.ExpandEnvironmentVariables(folder);
+            if (!Directory.Exists(path)) {
+                error = true;
+                errorMessage = $"Unable to find path '{path}'";
+                scanning = false;
+                return;
+            }
+            string[] directories = null;
+
+            await Task.Run(() => {
+                directories = Directory.GetFileSystemEntries(path, ".git", SearchOption.AllDirectories);
+            });
+
+            int currentRepoCount = 1;
+
+            foreach (string dir in directories) {
+                progress.Report($"{currentRepoCount} / {directories.Length}||{dir}");
+                
+                DirectoryInfo di = new(dir);
+
+                using Repository repo = new(dir);
+
+                RepositoryStatus test = repo.RetrieveStatus(new StatusOptions());
+
+                var info = new GitRepoInfo() {
+                    RepoDirectory = di.Parent,
+                    ScannedFolder = Environment.ExpandEnvironmentVariables(folder),
+                    ErrorOccurred = false,
+                    Changes = []
+                };
+
+
+                foreach(var item in test) {
+                    string prefix = string.Empty;
+                    switch (item.State) {
+                        case FileStatus.NewInIndex:
+                        case FileStatus.NewInWorkdir:
+                            prefix = "AA ";
+                            break;
+                        case FileStatus.ModifiedInIndex:
+                        case FileStatus.RenamedInIndex:
+                        case FileStatus.TypeChangeInIndex:
+                        case FileStatus.ModifiedInWorkdir:
+                        case FileStatus.TypeChangeInWorkdir:
+                        case FileStatus.RenamedInWorkdir:
+                            prefix = "MM ";
+                            break;
+                        case FileStatus.DeletedFromIndex:
+                        case FileStatus.DeletedFromWorkdir:
+                            prefix = "DD ";
+                            break;
+                        //case FileStatus.Nonexistent:
+                        //    break;
+                        //case FileStatus.Unaltered:
+                        //    break;
+                            //break;
+                        //case FileStatus.Unreadable:
+                        //    break;
+                        case FileStatus.Ignored:
+                            continue;
+                        //case FileStatus.Conflicted:
+                        //    break;
+                    }
+                    info.Changes.Add(prefix + item.FilePath);
+                }
+
+                if (repo.Stashes.Count() > 0) {
+                    info.Stashes = repo.Stashes.Select(x => x.Message).ToList();
+                }
+
+                if (repo.Head.TrackingDetails.AheadBy > 0)
+                    info.LocalAheadOfRemote = true;
 
                 gitRepoInfos.Add(info);
                 currentRepoCount++;

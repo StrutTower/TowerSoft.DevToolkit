@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
+using TowerSoft.DevToolkit.Services;
 using TowerSoft.DevToolkit.Utilities;
 
 namespace TowerSoft.DevToolkit {
@@ -9,11 +10,13 @@ namespace TowerSoft.DevToolkit {
     public partial class MainWindow : Window {
         public MainWindow() {
             InitializeComponent();
-            ServiceCollection serviceCollection = new();
-            serviceCollection.AddWpfBlazorWebView();
-            serviceCollection.AddBlazorWebViewDeveloperTools();
+            ServiceCollection services = new();
+            services.AddWpfBlazorWebView();
+            services.AddBlazorWebViewDeveloperTools();
+            services.AddSingleton<AppSettingsService>();
+           
 
-            Resources.Add("services", serviceCollection.BuildServiceProvider());
+            Resources.Add("services", services.BuildServiceProvider());
         }
 
         protected override void OnSourceInitialized(EventArgs e) {

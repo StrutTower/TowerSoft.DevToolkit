@@ -24,13 +24,13 @@ namespace TowerSoft.DevToolkit.Components.GitScanner {
             string prefix = change[..2];
             string file = change[3..];
 
-            if (prefix == "??" || prefix.Contains('A')) {
+            if (prefix == "AA") {
                 return " + " + file;
             }
-            if (prefix.Contains('M')) {
+            if (prefix == "MM") {
                 return " * " + file;
             }
-            if (prefix.Contains('D')) {
+            if (prefix == "DD") {
                 return " - " + file;
             }
             return prefix + " " + file;
@@ -39,16 +39,15 @@ namespace TowerSoft.DevToolkit.Components.GitScanner {
         private static string GetChangeClass(string change) {
             string prefix = change[..2];
 
-            if (prefix == "??" || prefix.Contains('A')) {
+            if (prefix == "AA") {
                 return "git-added";
             }
-            if (prefix.Contains('M')) {
+            if (prefix == "MM") {
                 return "git-modified";
             }
-            if (prefix.Contains('D')) {
+            if (prefix == "DD") {
                 return "git-removed";
             }
-
             return string.Empty;
         }
 
