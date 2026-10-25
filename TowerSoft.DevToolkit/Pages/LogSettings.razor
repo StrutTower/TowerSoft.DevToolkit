@@ -22,7 +22,7 @@
 <div class="container-fluid">
     @if (appSettings.LogApplications != null) {
         @foreach (LogApplication app in appSettings.LogApplications.OrderBy(x => x.Name)) {
-            <div class="card">
+            <div class="card mb-2">
                 <div class="bg-dark px-3 py-2 border-bottom">
                     <span class="h5 my-0">@app.Name</span>
 
@@ -103,7 +103,7 @@
 
             <div class="mb-3">
                 <label>Log Rolling Type</label>
-                <InputSelect @bind-Value="modalLogInstance.RollingType" class="form-control" required>
+                <InputSelect @bind-Value="modalLogInstance.RollingType" class="form-select" required>
                     @foreach(Enum enumValue in Enum.GetValues(typeof(RollingType))) {
                         <option value="@enumValue">@EnumUtilities.GetEnumDisplayName(enumValue)</option>
                     }

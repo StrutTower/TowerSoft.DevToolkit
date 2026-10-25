@@ -14,6 +14,15 @@ namespace TowerSoft.DevToolkit.Components.Formatter {
         private FormatterLanguageType languageType;
 
         private async Task Minify() {
+            errorOccurred = false;
+            outputText = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(inputText)) {
+                errorOccurred = true;
+                outputText = "No input text found.";
+                return;
+            }
+
             FormatterResult result;
             switch (languageType) {
                 case FormatterLanguageType.HTML:
@@ -36,6 +45,15 @@ namespace TowerSoft.DevToolkit.Components.Formatter {
         }
 
         private async Task Beautify() {
+            errorOccurred = false;
+            outputText = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(inputText)) {
+                errorOccurred = true;
+                outputText = "No input text found.";
+                return;
+            }
+
             FormatterResult result;
             switch (languageType) {
                 case FormatterLanguageType.HTML:
@@ -91,6 +109,7 @@ namespace TowerSoft.DevToolkit.Components.Formatter {
         }
 
         private async Task<FormatterResult> FormatCss(bool minify) {
+
             CssSettings settings = new();
             if (!minify) {
                 settings.OutputMode = OutputMode.MultipleLines;
@@ -144,7 +163,7 @@ namespace TowerSoft.DevToolkit.Components.Formatter {
             FormatterResult result = new();
             try {
                 await Task.Run(() => {
-                   var obj = JsonConvert.DeserializeObject<JObject>(inputText);
+                    var obj = JsonConvert.DeserializeObject<JObject>(inputText);
                     result.Output = JsonConvert.SerializeObject(obj, formatting);
                 });
             } catch (Exception ex) {

@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
 		<TargetFramework>net8.0-windows</TargetFramework>
-		<Version>0.0.4</Version>
+		<Version>0.0.5</Version>
 		<Nullable>disable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UseWPF>true</UseWPF>
@@ -26,6 +26,7 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.3" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 		<PackageReference Include="NUglify" Version="1.21.17" />
+		<PackageReference Include="SqlParserCS" Version="0.6.5" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -35,10 +36,6 @@
 	  <None Include="package.json">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </None>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Components\PocoGenerator\" />
 	</ItemGroup>
 
 </Project>

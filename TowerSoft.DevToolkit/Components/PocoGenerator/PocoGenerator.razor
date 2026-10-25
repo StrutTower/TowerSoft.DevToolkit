@@ -1,0 +1,64 @@
+﻿
+<div class="d-flex flex-column h-100">
+    <h3><span title="">POCO</span> Generator</h3>
+    <p>Generates POCO/Domain class for C# from a string like a SQL create table statement.</p>
+
+    <div>
+        <InputRadioGroup @bind-Value="@inputType">
+            <div class="form-check-inline">
+                <label class="form-check-label">
+                    <InputRadio Value="@InputType.SQL" class="form-check-input" /> SQL
+                </label>
+            </div>
+
+            <div class="form-check-inline">
+                <label class="form-check-label">
+                    <InputRadio Value="@InputType.JsonXml" class="form-check-input" /> JSON/XML
+                </label>
+            </div>
+
+        </InputRadioGroup>
+    </div>
+
+    @if (inputType == InputType.JsonXml) {
+        <p class="mt-3">
+            Visual Studio already supports converting JSON and XML to POCO classes.
+        </p>
+
+        <ul>
+            <li>Copy the JSON or XML string.</li>
+            <li>In Vidual Studio, create a new class file.</li>
+            <li>Click on Edit -> Paste Special -> Paste JSON as Classes or Paste XML as Classes</li>
+        </ul>
+    } else {
+        <div class="row g-2 h-100 pb-1">
+            <div class="col d-flex flex-column">
+                <label>
+                    Input
+                    @if (inputType == InputType.SQL) {
+                        @:(Use a SQL create table statement)
+                    }
+                </label>
+                <InputTextArea @bind-Value="inputText" class="form-control font-monospace flex-grow-1 no-resize" wrap="off"></InputTextArea>
+            </div>
+            <div class="col-auto d-flex flex-column">
+
+                <div class="mb-3">
+                    <button type="button" class="btn btn-primary" @onclick="Generate">
+                        Generate
+                    </button>
+                </div>
+
+                @if (!errorOccurred && !string.IsNullOrWhiteSpace(outputText)) {
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-primary w-100" @onclick="Copy">Copy<br />Output</button>
+                    </div>
+                }
+            </div>
+            <div class="col d-flex flex-column">
+                <label>Output</label>
+                <textarea @bind="@outputText" class="form-control font-monospace flex-grow-1 no-resize formatter-output @(errorOccurred ? "textarea-error" : "")" wrap="off" readonly />
+            </div>
+        </div>
+    }
+</div>

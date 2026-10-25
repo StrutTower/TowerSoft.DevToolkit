@@ -26,7 +26,7 @@ namespace TowerSoft.DevToolkit.Utilities {
             //int[] border = [int.Parse(ToBgr(borderBackground), System.Globalization.NumberStyles.HexNumber)];
             //DwmSetWindowAttribute(handle, DWWMA_BORDER_COLOR, border, 4);
 
-            _ = DwmSetWindowAttribute(handle, (int)DWMWA.WINDOW_CORNER_PREFERENCE, [(int)DWM_WINDOW_CORNER_PREFERENCE.DONOTROUND], 4);
+            _ = DwmSetWindowAttribute(handle, (int)DWMWA.WINDOW_CORNER_PREFERENCE, [(int)DWM_WINDOW_CORNER_PREFERENCE.ROUND], 4);
         }
 
         private static string ToBgr(Color c) => $"{c.B:X2}{c.G:X2}{c.R:X2}";

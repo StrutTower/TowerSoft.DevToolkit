@@ -3,7 +3,7 @@
   "name": "wpf-blazor-template",
   "private": true,
   "dependencies": {
-    "tower-bootstrap-theme": "5.3.6"
+    "tower-bootstrap-theme": "5.4.2"
   },
   "devDependencies": {
     "browserslist": "4.28.1",
